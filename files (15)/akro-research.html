@@ -1,1527 +1,1936 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AKRO Research — Science Without Shortcuts™</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-warm: #E8E5E0;
-  --bg-card: #EDEBE8;
-  --bg-white: #F5F3F0;
-  --bg-pure-white: #FAFAF8;
-  --navy: #1A2F3F;
-  --navy-light: #2A4458;
-  --navy-hover: #243D52;
-  --gold: #B8975A;
-  --gold-light: #C9A96B;
-  --gold-muted: rgba(184,151,90,0.12);
-  --green: #5A8A6A;
-  --green-bg: rgba(90,138,106,0.1);
-  --green-border: rgba(90,138,106,0.25);
-  --orange: #C4763B;
-  --orange-bg: rgba(196,118,59,0.1);
-  --red: #B54A4A;
-  --text-primary: #1A2F3F;
-  --text-body: #3D4F5F;
-  --text-muted: #7A8A96;
-  --text-light: #9FABB5;
-  --border: rgba(26,47,63,0.08);
-  --border-strong: rgba(26,47,63,0.12);
-  --shadow-sm: 0 1px 3px rgba(26,47,63,0.06);
-  --shadow-md: 0 4px 16px rgba(26,47,63,0.08);
-  --shadow-lg: 0 8px 32px rgba(26,47,63,0.1);
-  --radius: 10px;
-  --radius-lg: 14px;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKRO Research — Science Without Shortcuts™</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-warm: #E8E5E0;
+      --bg-card: #EDEBE8;
+      --bg-white: #F5F3F0;
+      --bg-pure-white: #FAFAF8;
+      --navy: #1A2F3F;
+      --navy-light: #2A4458;
+      --navy-hover: #243D52;
+      --gold: #B8975A;
+      --gold-light: #C9A96B;
+      --gold-muted: rgba(184, 151, 90, 0.12);
+      --green: #5A8A6A;
+      --green-bg: rgba(90, 138, 106, 0.1);
+      --green-border: rgba(90, 138, 106, 0.25);
+      --orange: #C4763B;
+      --orange-bg: rgba(196, 118, 59, 0.1);
+      --red: #B54A4A;
+      --text-primary: #1A2F3F;
+      --text-body: #3D4F5F;
+      --text-muted: #7A8A96;
+      --text-light: #9FABB5;
+      --border: rgba(26, 47, 63, 0.08);
+      --border-strong: rgba(26, 47, 63, 0.12);
+      --shadow-sm: 0 1px 3px rgba(26, 47, 63, 0.06);
+      --shadow-md: 0 4px 16px rgba(26, 47, 63, 0.08);
+      --shadow-lg: 0 8px 32px rgba(26, 47, 63, 0.1);
+      --radius: 10px;
+      --radius-lg: 14px;
+    }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg-warm);
-  color: var(--text-primary);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-/* === AGE GATE MODAL === */
-.age-gate-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: rgba(26,47,63,0.6);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  opacity: 1;
-  transition: opacity 0.5s ease;
-}
-.age-gate-overlay.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-.age-gate {
-  background: var(--bg-pure-white);
-  border-radius: 20px;
-  padding: 48px 40px;
-  max-width: 480px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 24px 64px rgba(26,47,63,0.2);
-  transform: translateY(0);
-  transition: transform 0.5s ease;
-}
-.age-gate-overlay.hidden .age-gate { transform: translateY(20px); }
-.age-gate .gate-logo { margin-bottom: 28px; }
-.age-gate h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--navy);
-  margin-bottom: 12px;
-}
-.age-gate .gate-body {
-  font-size: 14px;
-  color: var(--text-body);
-  line-height: 1.7;
-  margin-bottom: 32px;
-}
-.gate-buttons {
-  display: flex;
-  gap: 12px;
-}
-.gate-btn {
-  flex: 1;
-  padding: 14px;
-  border-radius: var(--radius);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
-}
-.gate-btn.confirm {
-  background: var(--navy);
-  color: white;
-}
-.gate-btn.confirm:hover { background: var(--navy-hover); box-shadow: var(--shadow-md); }
-.gate-btn.deny {
-  background: var(--bg-card);
-  color: var(--text-muted);
-  border: 1px solid var(--border-strong);
-}
-.gate-btn.deny:hover { background: var(--bg-warm); }
-.gate-disclaimer {
-  font-size: 11px;
-  color: var(--text-light);
-  margin-top: 20px;
-  line-height: 1.6;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-warm);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-/* === PROMO BAR === */
-.promo-bar {
-  background: var(--navy);
-  color: white;
-  text-align: center;
-  padding: 10px 24px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-.promo-bar span { color: var(--gold-light); font-weight: 600; }
+    /* === AGE GATE MODAL === */
+    .age-gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(26, 47, 63, 0.6);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
 
-/* === NAVIGATION === */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: var(--bg-pure-white);
-  border-bottom: 1px solid var(--border);
-  transition: box-shadow 0.3s;
-}
-nav.scrolled { box-shadow: var(--shadow-md); }
+    .age-gate-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-.nav-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 48px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-.logo {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  text-decoration: none;
-}
-.logo-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--navy);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-.logo-sub {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--gold);
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-}
+    .age-gate {
+      background: var(--bg-pure-white);
+      border-radius: 20px;
+      padding: 48px 40px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(26, 47, 63, 0.2);
+      transform: translateY(0);
+      transition: transform 0.5s ease;
+    }
 
-.nav-contact {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-.nav-contact a {
-  color: var(--text-body);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.nav-contact a:hover { color: var(--navy); }
-.nav-contact .phone { font-weight: 600; color: var(--navy); }
+    .age-gate-overlay.hidden .age-gate {
+      transform: translateY(20px);
+    }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.nav-search {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-.nav-search:hover { border-color: var(--navy); color: var(--navy); }
-.nav-cart-btn {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-.nav-cart-btn:hover { border-color: var(--navy); color: var(--navy); }
-.cart-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--navy);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .age-gate .gate-logo {
+      margin-bottom: 28px;
+    }
 
-.nav-links-bar {
-  border-top: 1px solid var(--border);
-  padding: 0 48px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  list-style: none;
-  overflow-x: auto;
-}
-.nav-links a {
-  display: block;
-  padding: 12px 20px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-body);
-  text-decoration: none;
-  white-space: nowrap;
-  transition: all 0.2s;
-  border-bottom: 2px solid transparent;
-}
-.nav-links a:hover {
-  color: var(--navy);
-  border-bottom-color: var(--gold);
-}
-.nav-links a.active {
-  color: var(--navy);
-  font-weight: 600;
-  border-bottom-color: var(--navy);
-}
+    .age-gate h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
 
-.quick-cats {
-  display: flex;
-  gap: 8px;
-  padding: 10px 48px;
-  background: var(--bg-warm);
-  border-bottom: 1px solid var(--border);
-  max-width: 100%;
-  overflow-x: auto;
-}
-.quick-cat {
-  padding: 6px 16px;
-  border-radius: 100px;
-  border: 1px solid var(--border-strong);
-  background: var(--bg-pure-white);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-body);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s;
-  text-decoration: none;
-}
-.quick-cat:hover { background: var(--navy); color: white; border-color: var(--navy); }
+    .age-gate .gate-body {
+      font-size: 14px;
+      color: var(--text-body);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
 
-/* === HERO === */
-.hero {
-  background: var(--bg-pure-white);
-  padding: 60px 48px 64px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-inner {
-  max-width: 1320px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
-}
-.hero-content { position: relative; z-index: 2; }
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 100px;
-  background: var(--gold-muted);
-  border: 1px solid rgba(184,151,90,0.2);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 24px;
-}
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(36px, 4.5vw, 56px);
-  font-weight: 700;
-  line-height: 1.15;
-  color: var(--navy);
-  margin-bottom: 20px;
-  letter-spacing: -0.5px;
-}
-.hero h1 em {
-  font-style: italic;
-  color: var(--gold);
-}
-.hero-desc {
-  font-size: 16px;
-  color: var(--text-body);
-  line-height: 1.75;
-  max-width: 480px;
-  margin-bottom: 32px;
-}
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-.btn-navy {
-  padding: 13px 28px;
-  border-radius: var(--radius);
-  border: none;
-  background: var(--navy);
-  color: white;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.btn-navy:hover { background: var(--navy-hover); box-shadow: var(--shadow-md); transform: translateY(-1px); }
-.btn-outline-navy {
-  padding: 13px 28px;
-  border-radius: var(--radius);
-  border: 1.5px solid var(--navy);
-  background: transparent;
-  color: var(--navy);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.btn-outline-navy:hover { background: var(--navy); color: white; }
+    .gate-buttons {
+      display: flex;
+      gap: 12px;
+    }
 
-.hero-stats {
-  display: flex;
-  gap: 40px;
-  margin-top: 48px;
-  padding-top: 32px;
-  border-top: 1px solid var(--border);
-}
-.hero-stat .stat-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--navy);
-}
-.hero-stat .stat-label {
-  font-size: 12px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-top: 2px;
-  font-weight: 500;
-}
+    .gate-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
 
-.hero-visual {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.hero-vial-display {
-  width: 100%;
-  max-width: 440px;
-  aspect-ratio: 1;
-  background: var(--bg-card);
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-.hero-vial-display::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 40%, rgba(184,151,90,0.06) 0%, transparent 60%);
-}
+    .gate-btn.confirm {
+      background: var(--navy);
+      color: white;
+    }
 
-.vial-illustration {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-  animation: vialFloat 6s ease-in-out infinite;
-}
-@keyframes vialFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-.vial-cap-top {
-  width: 40px;
-  height: 14px;
-  background: linear-gradient(180deg, #A0A0A0, #787878);
-  border-radius: 6px 6px 2px 2px;
-  position: relative;
-  z-index: 2;
-}
-.vial-neck {
-  width: 26px;
-  height: 16px;
-  background: rgba(220,225,230,0.5);
-  border-left: 2px solid rgba(200,205,210,0.6);
-  border-right: 2px solid rgba(200,205,210,0.6);
-}
-.vial-body-main {
-  width: 72px;
-  height: 160px;
-  background: linear-gradient(135deg, rgba(235,240,245,0.9), rgba(215,225,235,0.7));
-  border: 2px solid rgba(200,208,216,0.5);
-  border-radius: 4px 4px 8px 8px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 3px 0 8px rgba(255,255,255,0.5), inset -2px 0 6px rgba(0,0,0,0.04), 4px 8px 24px rgba(26,47,63,0.1);
-}
-.vial-liquid-fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 72%;
-  background: linear-gradient(180deg, rgba(26,47,63,0.03), rgba(26,47,63,0.06));
-  border-radius: 0 0 6px 6px;
-}
-.vial-label-area {
-  position: absolute;
-  top: 20%;
-  left: 8px;
-  right: 8px;
-  padding: 8px 6px;
-  background: white;
-  border-radius: 3px;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-.vial-label-brand {
-  font-size: 5px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--navy);
-}
-.vial-label-sub {
-  font-size: 3.5px;
-  color: var(--gold);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.vial-label-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-top: 2px;
-}
-.vial-label-dose {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 7px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-.vial-label-ruo {
-  font-size: 5px;
-  color: var(--text-light);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-top: 3px;
-}
-.vial-shine {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  width: 4px;
-  height: 35%;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.6);
-}
+    .gate-btn.confirm:hover {
+      background: var(--navy-hover);
+      box-shadow: var(--shadow-md);
+    }
 
-.hero-float-badge {
-  position: absolute;
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--bg-pure-white);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--navy);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  z-index: 3;
-}
-.hero-float-badge.top-right { top: 32px; right: 24px; }
-.hero-float-badge.bottom-left { bottom: 48px; left: 16px; }
-.hero-float-badge.bottom-right { bottom: 100px; right: 16px; }
-.badge-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.badge-dot.green { background: var(--green); }
-.badge-dot.gold { background: var(--gold); }
+    .gate-btn.deny {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-strong);
+    }
 
-/* === TRUST PILLARS === */
-.trust-pillars {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.trust-pillar {
-  background: var(--bg-pure-white);
-  padding: 32px 28px;
-  text-align: center;
-  transition: background 0.3s;
-}
-.trust-pillar:hover { background: var(--bg-white); }
-.pillar-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: var(--gold-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 14px;
-  font-size: 20px;
-}
-.pillar-title {
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--navy);
-  margin-bottom: 6px;
-}
-.pillar-desc {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
+    .gate-btn.deny:hover {
+      background: var(--bg-warm);
+    }
 
-/* === SECTION STYLES === */
-section { padding: 80px 48px; }
-.section-header { text-align: center; margin-bottom: 48px; }
-.section-eyebrow {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 12px;
-}
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(28px, 3.5vw, 40px);
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 12px;
-  letter-spacing: -0.3px;
-}
-.section-desc {
-  font-size: 15px;
-  color: var(--text-muted);
-  max-width: 520px;
-  margin: 0 auto;
-  line-height: 1.7;
-}
+    .gate-disclaimer {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 20px;
+      line-height: 1.6;
+    }
 
-/* === PRODUCT FILTER === */
-.filter-bar {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
-.filter-btn {
-  padding: 8px 18px;
-  border-radius: 100px;
-  border: 1px solid var(--border-strong);
-  background: var(--bg-pure-white);
-  color: var(--text-body);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.filter-btn:hover { border-color: var(--navy); color: var(--navy); }
-.filter-btn.active {
-  background: var(--navy);
-  border-color: var(--navy);
-  color: white;
-}
+    /* === PROMO BAR === */
+    .promo-bar {
+      background: var(--navy);
+      color: white;
+      text-align: center;
+      padding: 10px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
 
-/* === PRODUCT GRID === */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 20px;
-  max-width: 1320px;
-  margin: 0 auto;
-}
+    .promo-bar span {
+      color: var(--gold-light);
+      font-weight: 600;
+    }
 
-.product-card {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-.product-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--border-strong);
-  background: #F0EEED;
-}
+    /* === NAVIGATION === */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--bg-pure-white);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.3s;
+    }
 
-.product-img {
-  height: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(0,0,0,0.01) 100%);
-}
+    nav.scrolled {
+      box-shadow: var(--shadow-md);
+    }
 
-/* Card vial - BIGGER */
-.card-vial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform: scale(1.05);
-  transition: transform 0.4s;
-}
-.product-card:hover .card-vial { transform: scale(1.12); }
-.cv-cap {
-  width: 34px;
-  height: 12px;
-  border-radius: 5px 5px 1px 1px;
-  background: linear-gradient(180deg, #A8A8A8, #888);
-}
-.cv-neck {
-  width: 22px;
-  height: 12px;
-  background: rgba(210,215,220,0.5);
-  border-left: 1.5px solid rgba(195,200,205,0.5);
-  border-right: 1.5px solid rgba(195,200,205,0.5);
-}
-.cv-body {
-  width: 62px;
-  height: 132px;
-  background: linear-gradient(135deg, rgba(235,240,245,0.95), rgba(215,225,235,0.75));
-  border: 1.5px solid rgba(200,208,216,0.5);
-  border-radius: 3px 3px 6px 6px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 2px 0 6px rgba(255,255,255,0.5), 3px 6px 18px rgba(26,47,63,0.1);
-}
-.cv-liquid {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 68%;
-  border-radius: 0 0 5px 5px;
-}
-.cv-label {
-  position: absolute;
-  top: 16%;
-  left: 5px;
-  right: 5px;
-  background: white;
-  border-radius: 2px;
-  padding: 6px 4px;
-  text-align: center;
-}
-.cv-label-brand {
-  font-size: 5px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--navy);
-}
-.cv-label-sub {
-  font-size: 3.5px;
-  color: var(--gold);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.cv-label-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 8px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-top: 2px;
-}
-.cv-label-dose {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 6px;
-  color: var(--text-muted);
-  margin-top: 1px;
-}
-.cv-shine {
-  position: absolute;
-  top: 6px;
-  left: 5px;
-  width: 3px;
-  height: 30%;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.6);
-}
+    .nav-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
-.product-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.badge-new { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-.badge-popular { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-.badge-exclusive { background: var(--gold-muted); color: var(--gold); border: 1px solid rgba(184,151,90,0.25); }
-.badge-sale { background: var(--orange-bg); color: var(--orange); border: 1px solid rgba(196,118,59,0.25); }
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      text-decoration: none;
+    }
 
-.product-details {
-  padding: 18px 20px 22px;
-}
-.product-brand {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--gold);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.product-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 6px;
-}
-.product-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.6;
-  margin-bottom: 12px;
-}
-.product-stock {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 14px;
-}
-.stock-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-}
-.stock-in .stock-dot { background: var(--green); }
-.stock-in { color: var(--green); }
-.stock-low .stock-dot { background: var(--orange); }
-.stock-low { color: var(--orange); }
-.stock-out .stock-dot { background: var(--red); }
-.stock-out { color: var(--red); }
+    .logo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
 
-.product-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
-.product-price {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--navy);
-}
-.product-price .currency { font-size: 14px; font-weight: 400; }
-.product-price .usd { font-size: 12px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; margin-left: 4px; }
-.product-price .original-price {
-  font-size: 13px;
-  color: var(--text-light);
-  text-decoration: line-through;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 400;
-  margin-left: 6px;
-}
-.btn-add-cart {
-  padding: 9px 18px;
-  border-radius: 8px;
-  border: none;
-  background: var(--navy);
-  color: white;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s;
-}
-.btn-add-cart:hover { background: var(--navy-hover); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
-.btn-add-cart.out-of-stock {
-  background: var(--bg-warm);
-  color: var(--text-light);
-  cursor: not-allowed;
-}
+    .logo-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
 
-/* === COA SECTION === */
-.coa-section { background: var(--bg-pure-white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.coa-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  max-width: 1200px;
-  margin: 0 auto;
-  align-items: center;
-}
-.coa-document {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  font-family: 'JetBrains Mono', monospace;
-  box-shadow: var(--shadow-md);
-}
-.coa-doc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 16px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
-.coa-doc-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--navy);
-  letter-spacing: 0.5px;
-}
-.coa-verified-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: var(--green-bg);
-  border: 1px solid var(--green-border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--green);
-}
-.coa-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 12.5px;
-}
-.coa-row:last-child { border-bottom: none; }
-.coa-row .label { color: var(--text-muted); }
-.coa-row .value { color: var(--navy); font-weight: 500; }
-.coa-row .pass { color: var(--green); font-weight: 600; }
+    .nav-contact {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
 
-.coa-content h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 16px;
-  letter-spacing: -0.3px;
-  line-height: 1.2;
-}
-.coa-content p {
-  font-size: 15px;
-  color: var(--text-body);
-  line-height: 1.8;
-  margin-bottom: 12px;
-}
-.coa-checks {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 24px;
-}
-.coa-check {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--text-body);
-}
-.check-circle {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--green-bg);
-  border: 1px solid var(--green-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--green);
-  font-size: 11px;
-  flex-shrink: 0;
-  font-weight: 700;
-}
+    .nav-contact a {
+      color: var(--text-body);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
 
-/* === ABOUT === */
-.about-section {
-  background: var(--navy);
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-.about-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(184,151,90,0.08) 0%, transparent 50%);
-}
-.about-inner {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-.about-inner .section-eyebrow { color: var(--gold-light); }
-.about-inner h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(28px, 3.5vw, 40px);
-  font-weight: 700;
-  margin-bottom: 24px;
-  letter-spacing: -0.3px;
-}
-.about-inner h2 em { color: var(--gold-light); font-style: italic; }
-.about-inner p {
-  font-size: 16px;
-  color: rgba(255,255,255,0.7);
-  line-height: 1.8;
-  margin-bottom: 16px;
-}
-.about-quote {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-style: italic;
-  color: var(--gold-light);
-  margin-top: 32px;
-  padding-top: 32px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
+    .nav-contact a:hover {
+      color: var(--navy);
+    }
 
-/* === NEWSLETTER === */
-.newsletter-section { background: var(--bg-warm); }
-.newsletter-card {
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-  background: var(--bg-pure-white);
-  padding: 48px 40px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
-}
-.newsletter-form {
-  display: flex;
-  gap: 10px;
-  margin-top: 24px;
-}
-.newsletter-form input {
-  flex: 1;
-  padding: 13px 18px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border-strong);
-  background: var(--bg-card);
-  color: var(--text-primary);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-.newsletter-form input:focus { border-color: var(--navy); }
-.newsletter-form input::placeholder { color: var(--text-light); }
+    .nav-contact .phone {
+      font-weight: 600;
+      color: var(--navy);
+    }
 
-/* === FOOTER === */
-footer {
-  background: var(--navy);
-  color: white;
-  padding: 56px 48px 28px;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 48px;
-  max-width: 1320px;
-  margin: 0 auto;
-}
-.footer-brand-desc {
-  color: rgba(255,255,255,0.5);
-  font-size: 13.5px;
-  line-height: 1.7;
-  margin-top: 16px;
-  max-width: 300px;
-}
-.footer-col h4 {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--gold-light);
-  margin-bottom: 18px;
-}
-.footer-col a {
-  display: block;
-  color: rgba(255,255,255,0.55);
-  text-decoration: none;
-  font-size: 13.5px;
-  margin-bottom: 10px;
-  transition: color 0.2s;
-}
-.footer-col a:hover { color: white; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-.footer-bottom {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  max-width: 1320px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.footer-bottom-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 32px;
-  flex-wrap: wrap;
-}
-.footer-info {
-  font-size: 12px;
-  color: rgba(255,255,255,0.35);
-  line-height: 1.6;
-}
-.footer-info p { margin-bottom: 4px; }
-.footer-legal {
-  font-size: 11px;
-  color: rgba(255,255,255,0.3);
-  max-width: 480px;
-  line-height: 1.6;
-  text-align: right;
-}
-.footer-badges {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-  justify-content: flex-end;
-}
-.footer-badge-item {
-  padding: 5px 12px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.1);
-  font-size: 10px;
-  color: rgba(255,255,255,0.5);
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
+    .nav-search {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
 
-/* === DISCLAIMER BANNER === */
-.disclaimer-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 2000;
-  padding: 10px 48px;
-  background: var(--navy);
-  border-top: 2px solid var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
-}
-.disclaimer-banner strong { color: var(--gold-light); }
-.dismiss-btn {
-  padding: 4px 12px;
-  border-radius: 4px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: transparent;
-  color: rgba(255,255,255,0.6);
-  cursor: pointer;
-  font-size: 11px;
-  transition: all 0.2s;
-}
-.dismiss-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .nav-search:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
 
-/* === SCROLL REVEAL === */
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
+    .nav-cart-btn {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
 
-/* === RESPONSIVE === */
-@media (max-width: 1024px) {
-  .hero-inner { grid-template-columns: 1fr; }
-  .hero-visual { display: none; }
-  .trust-pillars { grid-template-columns: repeat(2, 1fr); }
-  .coa-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-}
-@media (max-width: 768px) {
-  section, .hero { padding-left: 24px; padding-right: 24px; }
-  .nav-top { padding: 12px 24px; }
-  .nav-links-bar { padding: 0 24px; }
-  .quick-cats { padding: 10px 24px; }
-  .nav-contact { display: none; }
-  .hero-stats { gap: 20px; flex-wrap: wrap; }
-  .trust-pillars { grid-template-columns: 1fr; }
-  .products-grid { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr; }
-  .newsletter-form { flex-direction: column; }
-  .footer-bottom-row { flex-direction: column; }
-  .footer-legal { text-align: left; }
-  .footer-badges { justify-content: flex-start; }
-  footer { padding: 40px 24px 20px; }
-  .disclaimer-banner { padding: 10px 24px; flex-wrap: wrap; justify-content: center; text-align: center; }
-}
-</style>
+    .nav-cart-btn:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-links-bar {
+      border-top: 1px solid var(--border);
+      padding: 0 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      list-style: none;
+      overflow-x: auto;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-body);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .nav-links a:hover {
+      color: var(--navy);
+      border-bottom-color: var(--gold);
+    }
+
+    .nav-links a.active {
+      color: var(--navy);
+      font-weight: 600;
+      border-bottom-color: var(--navy);
+    }
+
+    .quick-cats {
+      display: flex;
+      gap: 8px;
+      padding: 10px 48px;
+      background: var(--bg-warm);
+      border-bottom: 1px solid var(--border);
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .quick-cat {
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-pure-white);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-body);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .quick-cat:hover {
+      background: var(--navy);
+      color: white;
+      border-color: var(--navy);
+    }
+
+    /* === HERO === */
+    .hero {
+      background: var(--bg-pure-white);
+      padding: 60px 48px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: var(--gold-muted);
+      border: 1px solid rgba(184, 151, 90, 0.2);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 4.5vw, 56px);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--navy);
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-body);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-navy {
+      padding: 13px 28px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--navy);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-navy:hover {
+      background: var(--navy-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-navy {
+      padding: 13px 28px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--navy);
+      background: transparent;
+      color: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-outline-navy:hover {
+      background: var(--navy);
+      color: white;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .hero-stat .stat-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .hero-stat .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-vial-display {
+      width: 100%;
+      max-width: 440px;
+      aspect-ratio: 1;
+      background: var(--bg-card);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .hero-vial-display::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 40%, rgba(184, 151, 90, 0.06) 0%, transparent 60%);
+    }
+
+    .vial-illustration {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      animation: vialFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes vialFloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .vial-cap-top {
+      width: 40px;
+      height: 14px;
+      background: linear-gradient(180deg, #A0A0A0, #787878);
+      border-radius: 6px 6px 2px 2px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .vial-neck {
+      width: 26px;
+      height: 16px;
+      background: rgba(220, 225, 230, 0.5);
+      border-left: 2px solid rgba(200, 205, 210, 0.6);
+      border-right: 2px solid rgba(200, 205, 210, 0.6);
+    }
+
+    .vial-body-main {
+      width: 72px;
+      height: 160px;
+      background: linear-gradient(135deg, rgba(235, 240, 245, 0.9), rgba(215, 225, 235, 0.7));
+      border: 2px solid rgba(200, 208, 216, 0.5);
+      border-radius: 4px 4px 8px 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 3px 0 8px rgba(255, 255, 255, 0.5), inset -2px 0 6px rgba(0, 0, 0, 0.04), 4px 8px 24px rgba(26, 47, 63, 0.1);
+    }
+
+    .vial-liquid-fill {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 72%;
+      background: linear-gradient(180deg, rgba(26, 47, 63, 0.03), rgba(26, 47, 63, 0.06));
+      border-radius: 0 0 6px 6px;
+    }
+
+    .vial-label-area {
+      position: absolute;
+      top: 20%;
+      left: 8px;
+      right: 8px;
+      padding: 8px 6px;
+      background: white;
+      border-radius: 3px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    .vial-label-brand {
+      font-size: 5px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--navy);
+    }
+
+    .vial-label-sub {
+      font-size: 3.5px;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .vial-label-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-top: 2px;
+    }
+
+    .vial-label-dose {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .vial-label-ruo {
+      font-size: 5px;
+      color: var(--text-light);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .vial-shine {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 4px;
+      height: 35%;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .hero-float-badge {
+      position: absolute;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: var(--bg-pure-white);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    .hero-float-badge.top-right {
+      top: 32px;
+      right: 24px;
+    }
+
+    .hero-float-badge.bottom-left {
+      bottom: 48px;
+      left: 16px;
+    }
+
+    .hero-float-badge.bottom-right {
+      bottom: 100px;
+      right: 16px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .badge-dot.green {
+      background: var(--green);
+    }
+
+    .badge-dot.gold {
+      background: var(--gold);
+    }
+
+    /* === TRUST PILLARS === */
+    .trust-pillars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .trust-pillar {
+      background: var(--bg-pure-white);
+      padding: 32px 28px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    .trust-pillar:hover {
+      background: var(--bg-white);
+    }
+
+    .pillar-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--gold-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      font-size: 20px;
+    }
+
+    .pillar-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .pillar-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* === SECTION STYLES === */
+    section {
+      padding: 80px 48px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* === PRODUCT FILTER === */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border-radius: 100px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-pure-white);
+      color: var(--text-body);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--navy);
+      color: var(--navy);
+    }
+
+    .filter-btn.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    /* === PRODUCT GRID === */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-strong);
+      background: #F0EEED;
+    }
+
+    .product-img {
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: linear-gradient(180deg, var(--bg-card) 0%, rgba(0, 0, 0, 0.01) 100%);
+    }
+
+    /* Card vial - BIGGER */
+    .card-vial {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: scale(1.05);
+      transition: transform 0.4s;
+    }
+
+    .product-card:hover .card-vial {
+      transform: scale(1.12);
+    }
+
+    .cv-cap {
+      width: 34px;
+      height: 12px;
+      border-radius: 5px 5px 1px 1px;
+      background: linear-gradient(180deg, #A8A8A8, #888);
+    }
+
+    .cv-neck {
+      width: 22px;
+      height: 12px;
+      background: rgba(210, 215, 220, 0.5);
+      border-left: 1.5px solid rgba(195, 200, 205, 0.5);
+      border-right: 1.5px solid rgba(195, 200, 205, 0.5);
+    }
+
+    .cv-body {
+      width: 62px;
+      height: 132px;
+      background: linear-gradient(135deg, rgba(235, 240, 245, 0.95), rgba(215, 225, 235, 0.75));
+      border: 1.5px solid rgba(200, 208, 216, 0.5);
+      border-radius: 3px 3px 6px 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 2px 0 6px rgba(255, 255, 255, 0.5), 3px 6px 18px rgba(26, 47, 63, 0.1);
+    }
+
+    .cv-liquid {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68%;
+      border-radius: 0 0 5px 5px;
+    }
+
+    .cv-label {
+      position: absolute;
+      top: 16%;
+      left: 5px;
+      right: 5px;
+      background: white;
+      border-radius: 2px;
+      padding: 6px 4px;
+      text-align: center;
+    }
+
+    .cv-label-brand {
+      font-size: 5px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--navy);
+    }
+
+    .cv-label-sub {
+      font-size: 3.5px;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .cv-label-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-top: 2px;
+    }
+
+    .cv-label-dose {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .cv-shine {
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      width: 3px;
+      height: 30%;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .badge-new {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+    }
+
+    .badge-popular {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+    }
+
+    .badge-exclusive {
+      background: var(--gold-muted);
+      color: var(--gold);
+      border: 1px solid rgba(184, 151, 90, 0.25);
+    }
+
+    .badge-sale {
+      background: var(--orange-bg);
+      color: var(--orange);
+      border: 1px solid rgba(196, 118, 59, 0.25);
+    }
+
+    .product-details {
+      padding: 18px 20px 22px;
+    }
+
+    .product-brand {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .product-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .product-stock {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .stock-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .stock-in .stock-dot {
+      background: var(--green);
+    }
+
+    .stock-in {
+      color: var(--green);
+    }
+
+    .stock-low .stock-dot {
+      background: var(--orange);
+    }
+
+    .stock-low {
+      color: var(--orange);
+    }
+
+    .stock-out .stock-dot {
+      background: var(--red);
+    }
+
+    .stock-out {
+      color: var(--red);
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .product-price .currency {
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .product-price .usd {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      margin-left: 4px;
+    }
+
+    .product-price .original-price {
+      font-size: 13px;
+      color: var(--text-light);
+      text-decoration: line-through;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      margin-left: 6px;
+    }
+
+    .btn-add-cart {
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: none;
+      background: var(--navy);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .btn-add-cart:hover {
+      background: var(--navy-hover);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+
+    .btn-add-cart.out-of-stock {
+      background: var(--bg-warm);
+      color: var(--text-light);
+      cursor: not-allowed;
+    }
+
+    /* === COA SECTION === */
+    .coa-section {
+      background: var(--bg-pure-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .coa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .coa-document {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: var(--shadow-md);
+    }
+
+    .coa-doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .coa-doc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 0.5px;
+    }
+
+    .coa-verified-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .coa-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12.5px;
+    }
+
+    .coa-row:last-child {
+      border-bottom: none;
+    }
+
+    .coa-row .label {
+      color: var(--text-muted);
+    }
+
+    .coa-row .value {
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    .coa-row .pass {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .coa-content h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 16px;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    .coa-content p {
+      font-size: 15px;
+      color: var(--text-body);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+
+    .coa-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .coa-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-body);
+    }
+
+    .check-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green);
+      font-size: 11px;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    /* === ABOUT === */
+    .about-section {
+      background: var(--navy);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(184, 151, 90, 0.08) 0%, transparent 50%);
+    }
+
+    .about-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .about-inner .section-eyebrow {
+      color: var(--gold-light);
+    }
+
+    .about-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 700;
+      margin-bottom: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .about-inner h2 em {
+      color: var(--gold-light);
+      font-style: italic;
+    }
+
+    .about-inner p {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .about-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--gold-light);
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* === NEWSLETTER === */
+    .newsletter-section {
+      background: var(--bg-warm);
+    }
+
+    .newsletter-card {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      background: var(--bg-pure-white);
+      padding: 48px 40px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 13px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .newsletter-form input:focus {
+      border-color: var(--navy);
+    }
+
+    .newsletter-form input::placeholder {
+      color: var(--text-light);
+    }
+
+    /* === FOOTER === */
+    footer {
+      background: var(--navy);
+      color: white;
+      padding: 56px 48px 28px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    .footer-brand-desc {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13.5px;
+      line-height: 1.7;
+      margin-top: 16px;
+      max-width: 300px;
+    }
+
+    .footer-col h4 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 18px;
+    }
+
+    .footer-col a {
+      display: block;
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      font-size: 13.5px;
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      max-width: 1320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-info {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.35);
+      line-height: 1.6;
+    }
+
+    .footer-info p {
+      margin-bottom: 4px;
+    }
+
+    .footer-legal {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.3);
+      max-width: 480px;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    .footer-badges {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      justify-content: flex-end;
+    }
+
+    .footer-badge-item {
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* === DISCLAIMER BANNER === */
+    .disclaimer-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2000;
+      padding: 10px 48px;
+      background: var(--navy);
+      border-top: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .disclaimer-banner strong {
+      color: var(--gold-light);
+    }
+
+    .dismiss-btn {
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.2s;
+    }
+
+    .dismiss-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* === SCROLL REVEAL === */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 1024px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .trust-pillars {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .coa-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      section,
+      .hero {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .nav-top {
+        padding: 12px 24px;
+      }
+
+      .nav-links-bar {
+        padding: 0 24px;
+      }
+
+      .quick-cats {
+        padding: 10px 24px;
+      }
+
+      .nav-contact {
+        display: none;
+      }
+
+      .hero-stats {
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .trust-pillars {
+        grid-template-columns: 1fr;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .footer-bottom-row {
+        flex-direction: column;
+      }
+
+      .footer-legal {
+        text-align: left;
+      }
+
+      .footer-badges {
+        justify-content: flex-start;
+      }
+
+      footer {
+        padding: 40px 24px 20px;
+      }
+
+      .disclaimer-banner {
+        padding: 10px 24px;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- AGE GATE MODAL -->
-<div class="age-gate-overlay" id="ageGate">
-  <div class="age-gate">
-    <div class="gate-logo">
-      <a href="#" class="logo" style="justify-content:center;">
+  <!-- AGE GATE MODAL -->
+  <div class="age-gate-overlay" id="ageGate">
+    <div class="age-gate">
+      <div class="gate-logo">
+        <a href="#" class="logo" style="justify-content:center;">
+          <span class="logo-name">AKRO</span>
+          <span class="logo-sub">research</span>
+        </a>
+      </div>
+      <h2>Age Verification</h2>
+      <p class="gate-body">By entering this site you confirm you are 18+ years of age and reside in the United States.
+        All products are <strong>dietary supplements</strong> intended for adult use. These statements have not been
+        evaluated by the FDA.</p>
+      <div class="gate-buttons">
+        <button class="gate-btn confirm" onclick="closeAgeGate()">I Confirm</button>
+        <button class="gate-btn deny" onclick="window.location.href='https://google.com'">Exit</button>
+      </div>
+      <p class="gate-disclaimer">By entering, you agree to our Terms of Service and Disclaimer.</p>
+    </div>
+  </div>
+
+  <!-- PROMO BAR -->
+  <div class="promo-bar">
+    Free 2-Day Shipping on Orders <span>$150+</span>&nbsp;&nbsp;|&nbsp;&nbsp;20% Off Orders <span>$250+</span>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar">
+    <div class="nav-top">
+      <a href="#" class="logo">
         <span class="logo-name">AKRO</span>
         <span class="logo-sub">research</span>
       </a>
-    </div>
-    <h2>Researcher Access Verification</h2>
-    <p class="gate-body">By entering this site you confirm you are 21+ years of age, reside in the United States, and are a qualified researcher or acting in an independent research capacity. All products are for <strong>in-vitro research use only</strong> and are not intended for human or animal consumption.</p>
-    <div class="gate-buttons">
-      <button class="gate-btn confirm" onclick="closeAgeGate()">I Comply</button>
-      <button class="gate-btn deny" onclick="window.location.href='https://google.com'">I Do Not Comply</button>
-    </div>
-    <p class="gate-disclaimer">By entering, you agree to our Terms of Service and Legal Disclaimer.</p>
-  </div>
-</div>
-
-<!-- PROMO BAR -->
-<div class="promo-bar">
-  Free 2-Day Shipping on Orders <span>$150+</span>&nbsp;&nbsp;|&nbsp;&nbsp;20% Off Orders <span>$250+</span>
-</div>
-
-<!-- NAVIGATION -->
-<nav id="navbar">
-  <div class="nav-top">
-    <a href="#" class="logo">
-      <span class="logo-name">AKRO</span>
-      <span class="logo-sub">research</span>
-    </a>
-    <div class="nav-contact">
-      <span>Customer Support:</span>
-      <a href="tel:+19105551234" class="phone">(910) 555-1234</a>
-      <a href="mailto:support@akroresearch.com">support@akroresearch.com</a>
-    </div>
-    <div class="nav-actions">
-      <button class="nav-search">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </button>
-      <button class="nav-cart-btn">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-        <span class="cart-badge" id="cartBadge">0</span>
-      </button>
-    </div>
-  </div>
-  <div class="nav-links-bar">
-    <ul class="nav-links">
-      <li><a href="#" class="active">Home</a></li>
-      <li><a href="#products">Catalog</a></li>
-      <li><a href="#coa">COA Library</a></li>
-      <li><a href="#">Order Tracking</a></li>
-      <li><a href="#">Wholesale</a></li>
-      <li><a href="#">Payment</a></li>
-      <li><a href="#">Contact</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#">FAQ</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- QUICK CATS -->
-<div class="quick-cats">
-  <a class="quick-cat" href="#products" onclick="setFilter('all')">Peptides</a>
-  <a class="quick-cat" href="#products" onclick="setFilter('stacks')">Blends</a>
-  <a class="quick-cat" href="#">Solvents</a>
-  <a class="quick-cat" href="#">Capsules</a>
-  <a class="quick-cat" href="#products">View Full Catalog</a>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-eyebrow">✦ Science Without Shortcuts™</div>
-      <h1>Endotoxin-Free,<br>Research-Grade.<br><em>Cutting Edge Research<br>Starts Here.</em></h1>
-      <p class="hero-desc">Ultra-pure, cGMP-compliant peptides with every batch independently tested by licensed U.S. laboratories. No overseas lab results, no shortcuts — just verifiable science.</p>
-      <div class="hero-actions">
-        <a href="#products" class="btn-navy">Browse Catalog →</a>
-        <a href="#coa" class="btn-outline-navy">View COA Library</a>
+      <div class="nav-contact">
+        <span>Customer Support:</span>
+        <a href="tel:+19105551234" class="phone">(910) 555-1234</a>
+        <a href="mailto:support@akroresearch.com">support@akroresearch.com</a>
       </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="stat-val">99.2%+</div>
-          <div class="stat-label">Avg Purity</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-val">150+</div>
-          <div class="stat-label">Compounds</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-val">48hr</div>
-          <div class="stat-label">Shipping</div>
-        </div>
-        <div class="hero-stat">
-          <div class="stat-val">3rd Party</div>
-          <div class="stat-label">Tested</div>
-        </div>
+      <div class="nav-actions">
+        <button class="nav-search">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+        </button>
+        <button class="nav-cart-btn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" viewBox="0 0 24 24">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" />
+          </svg>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-vial-display">
-        <div class="vial-illustration">
-          <div class="vial-cap-top"></div>
-          <div class="vial-neck"></div>
-          <div class="vial-body-main">
-            <div class="vial-liquid-fill"></div>
-            <div class="vial-label-area">
-              <div class="vial-label-brand">AKRO</div>
-              <div class="vial-label-sub">research</div>
-              <div class="vial-label-name">BPC-157</div>
-              <div class="vial-label-dose">5MG</div>
-              <div class="vial-label-ruo">Research Use Only</div>
-            </div>
-            <div class="vial-shine"></div>
+    <div class="nav-links-bar">
+      <ul class="nav-links">
+        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#products">Catalog</a></li>
+        <li><a href="#coa">COA Library</a></li>
+        <li><a href="#">Order Tracking</a></li>
+        <li><a href="#">Wholesale</a></li>
+        <li><a href="#">Payment</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- QUICK CATS -->
+  <div class="quick-cats">
+    <a class="quick-cat" href="#products" onclick="setFilter('all')">All Supplements</a>
+    <a class="quick-cat" href="#products" onclick="setFilter('stacks')">Bundles</a>
+    <a class="quick-cat" href="#">Powders</a>
+    <a class="quick-cat" href="#">Capsules</a>
+    <a class="quick-cat" href="#products">View Full Catalog</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-eyebrow">✦ Science Without Shortcuts™</div>
+        <h1>Premium Quality,<br>Lab-Tested.<br><em>Your Wellness Journey<br>Starts Here.</em></h1>
+        <p class="hero-desc">Ultra-pure, GMP-compliant supplements with every batch independently tested by licensed
+          U.S. laboratories. No fillers, no shortcuts — just clean, science-backed nutrition.</p>
+        <div class="hero-actions">
+          <a href="#products" class="btn-navy">Browse Catalog →</a>
+          <a href="#coa" class="btn-outline-navy">View COA Library</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="stat-val">99.2%+</div>
+            <div class="stat-label">Avg Purity</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-val">80+</div>
+            <div class="stat-label">Products</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-val">48hr</div>
+            <div class="stat-label">Shipping</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-val">3rd Party</div>
+            <div class="stat-label">Tested</div>
           </div>
         </div>
-        <div class="hero-float-badge top-right">
-          <span class="badge-dot green"></span> HPLC Verified
+      </div>
+      <div class="hero-visual">
+        <div class="hero-vial-display">
+          <div class="vial-illustration">
+            <div class="vial-cap-top"></div>
+            <div class="vial-neck"></div>
+            <div class="vial-body-main">
+              <div class="vial-liquid-fill"></div>
+              <div class="vial-label-area">
+                <div class="vial-label-brand">AKRO</div>
+                <div class="vial-label-sub">wellness</div>
+                <div class="vial-label-name">Collagen</div>
+                <div class="vial-label-dose">500MG</div>
+                <div class="vial-label-ruo">Premium Grade</div>
+              </div>
+              <div class="vial-shine"></div>
+            </div>
+          </div>
+          <div class="hero-float-badge top-right">
+            <span class="badge-dot green"></span> Lab Verified
+          </div>
+          <div class="hero-float-badge bottom-left">
+            <span class="badge-dot gold"></span> GMP Compliant
+          </div>
+          <div class="hero-float-badge bottom-right">
+            <span class="badge-dot green"></span> COA Included
+          </div>
         </div>
-        <div class="hero-float-badge bottom-left">
-          <span class="badge-dot gold"></span> cGMP Compliant
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST PILLARS -->
+  <div class="trust-pillars">
+    <div class="trust-pillar">
+      <div class="pillar-icon">🔬</div>
+      <div class="pillar-title">Tested for Purity & Quality</div>
+      <div class="pillar-desc">Verifiable COAs by licensed U.S. labs. No overseas lab results.</div>
+    </div>
+    <div class="trust-pillar">
+      <div class="pillar-icon">🏭</div>
+      <div class="pillar-title">GMP Compliant Facility</div>
+      <div class="pillar-desc">Formulated in a GMP-certified facility following the highest manufacturing standards.
+      </div>
+    </div>
+    <div class="trust-pillar">
+      <div class="pillar-icon">📦</div>
+      <div class="pillar-title">Fast Insured Shipping</div>
+      <div class="pillar-desc">Free 2-Day shipping for orders $150+. Insurance included with every order.</div>
+    </div>
+    <div class="trust-pillar">
+      <div class="pillar-icon">💬</div>
+      <div class="pillar-title">Professional Support</div>
+      <div class="pillar-desc">Knowledgeable support from people who understand research.</div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section id="products" style="background: var(--bg-warm);">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Our Catalog</div>
+      <div class="section-title">Premium Supplement Collection</div>
+      <div class="section-desc">Every product undergoes rigorous third-party testing and quality analysis. Clean,
+        potent, and backed by science.</div>
+    </div>
+    <div class="filter-bar reveal">
+      <button class="filter-btn active" data-cat="all" onclick="filterProducts('all', this)">All</button>
+      <button class="filter-btn" data-cat="vitamins" onclick="filterProducts('vitamins', this)">Vitamins &
+        Minerals</button>
+      <button class="filter-btn" data-cat="collagen" onclick="filterProducts('collagen', this)">Collagen</button>
+      <button class="filter-btn" data-cat="adaptogens" onclick="filterProducts('adaptogens', this)">Adaptogens</button>
+      <button class="filter-btn" data-cat="cognitive" onclick="filterProducts('cognitive', this)">Focus & Mood</button>
+      <button class="filter-btn" data-cat="stacks" onclick="filterProducts('stacks', this)">Bundles</button>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </section>
+
+  <!-- COA SECTION -->
+  <section class="coa-section" id="coa">
+    <div class="coa-grid">
+      <div class="coa-document reveal">
+        <div class="coa-doc-header">
+          <span class="coa-doc-title">Certificate of Analysis</span>
+          <span class="coa-verified-badge">✓ Verified</span>
         </div>
-        <div class="hero-float-badge bottom-right">
-          <span class="badge-dot green"></span> COA Included
+        <div class="coa-row"><span class="label">Product</span><span class="value">Collagen Peptides (500mg)</span>
+        </div>
+        <div class="coa-row"><span class="label">Lot Number</span><span class="value">AKR-2026-0142</span></div>
+        <div class="coa-row"><span class="label">Manufacture Date</span><span class="value">2026-01-18</span></div>
+        <div class="coa-row"><span class="label">Purity</span><span class="value pass">99.41%</span></div>
+        <div class="coa-row"><span class="label">Identity Confirmed</span><span class="value pass">Pass (FTIR)</span>
+        </div>
+        <div class="coa-row"><span class="label">Appearance</span><span class="value pass">White fine powder</span>
+        </div>
+        <div class="coa-row"><span class="label">Microbiological</span><span class="value pass">Pass</span></div>
+        <div class="coa-row"><span class="label">Allergens</span><span class="value pass">None detected</span></div>
+        <div class="coa-row"><span class="label">Heavy Metals</span><span class="value pass">&lt; 10 ppm</span></div>
+        <div class="coa-row"><span class="label">Testing Lab</span><span class="value">Janssen Analytical, US</span>
+        </div>
+      </div>
+      <div class="coa-content reveal">
+        <div class="section-eyebrow">Radical Transparency</div>
+        <h3>Every Batch.<br>Every Test.<br>Every Time.</h3>
+        <p>We don't hide behind vague "tested for purity" claims. Every single batch comes with a publicly viewable
+          Certificate of Analysis from an independent, accredited U.S. laboratory.</p>
+        <p>Scan the QR code on any bottle to instantly access its specific COA with lot number, testing methodology, and
+          full results.</p>
+        <div class="coa-checks">
+          <div class="coa-check"><span class="check-circle">✓</span> Independent 3rd-party purity analysis</div>
+          <div class="coa-check"><span class="check-circle">✓</span> Identity confirmation testing</div>
+          <div class="coa-check"><span class="check-circle">✓</span> Microbiological & allergen screening</div>
+          <div class="coa-check"><span class="check-circle">✓</span> Heavy metal & contaminant testing</div>
+          <div class="coa-check"><span class="check-circle">✓</span> QR-linked lot traceability on every bottle</div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- TRUST PILLARS -->
-<div class="trust-pillars">
-  <div class="trust-pillar">
-    <div class="pillar-icon">🔬</div>
-    <div class="pillar-title">Tested for Purity & Endotoxins</div>
-    <div class="pillar-desc">Verifiable COAs by licensed U.S. labs. No overseas lab results.</div>
-  </div>
-  <div class="trust-pillar">
-    <div class="pillar-icon">🏭</div>
-    <div class="pillar-title">cGMP Compliant Facility</div>
-    <div class="pillar-desc">Formulated in an ISO 5 Laminar Flow Facility following cGMP standards.</div>
-  </div>
-  <div class="trust-pillar">
-    <div class="pillar-icon">📦</div>
-    <div class="pillar-title">Fast Insured Shipping</div>
-    <div class="pillar-desc">Free 2-Day shipping for orders $150+. Insurance included with every order.</div>
-  </div>
-  <div class="trust-pillar">
-    <div class="pillar-icon">💬</div>
-    <div class="pillar-title">Professional Support</div>
-    <div class="pillar-desc">Knowledgeable support from people who understand research.</div>
-  </div>
-</div>
-
-<!-- PRODUCTS -->
-<section id="products" style="background: var(--bg-warm);">
-  <div class="section-header reveal">
-    <div class="section-eyebrow">Research Catalog</div>
-    <div class="section-title">Premium Peptide Compounds</div>
-    <div class="section-desc">Every product undergoes rigorous third-party HPLC and mass spectrometry analysis. For laboratory and research use only.</div>
-  </div>
-  <div class="filter-bar reveal">
-    <button class="filter-btn active" data-cat="all" onclick="filterProducts('all', this)">All</button>
-    <button class="filter-btn" data-cat="growth" onclick="filterProducts('growth', this)">Growth Hormone</button>
-    <button class="filter-btn" data-cat="metabolic" onclick="filterProducts('metabolic', this)">Metabolic</button>
-    <button class="filter-btn" data-cat="recovery" onclick="filterProducts('recovery', this)">Recovery</button>
-    <button class="filter-btn" data-cat="cognitive" onclick="filterProducts('cognitive', this)">Cognitive</button>
-    <button class="filter-btn" data-cat="stacks" onclick="filterProducts('stacks', this)">Blends</button>
-  </div>
-  <div class="products-grid" id="productsGrid"></div>
-</section>
-
-<!-- COA SECTION -->
-<section class="coa-section" id="coa">
-  <div class="coa-grid">
-    <div class="coa-document reveal">
-      <div class="coa-doc-header">
-        <span class="coa-doc-title">Certificate of Analysis</span>
-        <span class="coa-verified-badge">✓ Verified</span>
-      </div>
-      <div class="coa-row"><span class="label">Product</span><span class="value">BPC-157 (5mg)</span></div>
-      <div class="coa-row"><span class="label">Lot Number</span><span class="value">AKR-2026-0142</span></div>
-      <div class="coa-row"><span class="label">Synthesis Date</span><span class="value">2026-01-18</span></div>
-      <div class="coa-row"><span class="label">HPLC Purity</span><span class="value pass">99.41%</span></div>
-      <div class="coa-row"><span class="label">Mass Spec (m/z)</span><span class="value pass">1419.6 ± 0.2</span></div>
-      <div class="coa-row"><span class="label">Appearance</span><span class="value pass">White lyophilized powder</span></div>
-      <div class="coa-row"><span class="label">Endotoxin</span><span class="value pass">&lt; 0.5 EU/mg</span></div>
-      <div class="coa-row"><span class="label">Sterility</span><span class="value pass">Pass</span></div>
-      <div class="coa-row"><span class="label">Heavy Metals</span><span class="value pass">&lt; 10 ppm</span></div>
-      <div class="coa-row"><span class="label">Testing Lab</span><span class="value">Janssen Analytical, US</span></div>
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="about-inner reveal">
+      <div class="section-eyebrow" style="color: var(--gold-light);">Our Story</div>
+      <h2>Built for Wellness,<br><em>Backed by Science.</em></h2>
+      <p>Founded in 2025, AKRO was created with a singular mission: to bring integrity, transparency, and uncompromising
+        quality to the supplement industry. Born out of frustration with a market saturated by corner-cutting and
+        profit-first mindsets, we set out to redefine what you should expect — and deserve.</p>
+      <p>We manufacture in a GMP-certified facility following the highest standards at every step. No shortcuts, no gray
+        areas, and no false promises. Just high-quality, genuine USA-made supplements backed by verifiable science.</p>
+      <div class="about-quote">"No shortcuts, no gray areas, and no false promises."</div>
     </div>
-    <div class="coa-content reveal">
-      <div class="section-eyebrow">Radical Transparency</div>
-      <h3>Every Batch.<br>Every Test.<br>Every Time.</h3>
-      <p>We don't hide behind vague "tested for purity" claims. Every single batch comes with a publicly viewable Certificate of Analysis from an independent, accredited U.S. laboratory.</p>
-      <p>Scan the QR code on any vial to instantly access its specific COA with lot number, testing methodology, and full results.</p>
-      <div class="coa-checks">
-        <div class="coa-check"><span class="check-circle">✓</span> Independent 3rd-party HPLC analysis</div>
-        <div class="coa-check"><span class="check-circle">✓</span> ESI-MS molecular weight confirmation</div>
-        <div class="coa-check"><span class="check-circle">✓</span> Endotoxin & sterility screening</div>
-        <div class="coa-check"><span class="check-circle">✓</span> Heavy metal & residual solvent testing</div>
-        <div class="coa-check"><span class="check-circle">✓</span> QR-linked lot traceability on every vial</div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="newsletter-card reveal">
+      <div class="section-eyebrow">Stay Updated</div>
+      <div class="section-title">Join the Research Network</div>
+      <div class="section-desc">Get early access to new products, restocks, and exclusive wellness insights.</div>
+      <div class="newsletter-form">
+        <input type="email" placeholder="you@email.com">
+        <button class="btn-navy">Subscribe</button>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ABOUT -->
-<section class="about-section" id="about">
-  <div class="about-inner reveal">
-    <div class="section-eyebrow" style="color: var(--gold-light);">Our Story</div>
-    <h2>Built by Researchers,<br><em>for Researchers.</em></h2>
-    <p>Founded in 2025, AKRO Research was created with a singular mission: to bring integrity, transparency, and uncompromising quality to the research peptide industry. Born out of frustration with a market saturated by corner-cutting and profit-first mindsets, we set out to redefine what researchers should expect — and deserve.</p>
-    <p>We manufacture in an ISO 5 Laminar Flow Facility following cGMP standards at every step. No shortcuts, no gray areas, and no false promises. Just high-purity, genuine USA-made peptides backed by verifiable science.</p>
-    <div class="about-quote">"No shortcuts, no gray areas, and no false promises."</div>
-  </div>
-</section>
-
-<!-- NEWSLETTER -->
-<section class="newsletter-section">
-  <div class="newsletter-card reveal">
-    <div class="section-eyebrow">Stay Updated</div>
-    <div class="section-title">Join the Research Network</div>
-    <div class="section-desc">Get early access to new compounds, batch restocks, and exclusive research insights.</div>
-    <div class="newsletter-form">
-      <input type="email" placeholder="researcher@institution.edu">
-      <button class="btn-navy">Subscribe</button>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div>
-      <a href="#" class="logo">
-        <span class="logo-name" style="color:white;">AKRO</span>
-        <span class="logo-sub">research</span>
-      </a>
-      <p class="footer-brand-desc">Premium research-grade peptides synthesized for advanced in-vitro laboratory applications. All products are sold strictly for research purposes only and are not intended for human consumption.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Information</h4>
-      <a href="#">Company Information</a>
-      <a href="#">Terms & Conditions</a>
-      <a href="#">Legal Disclaimer</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">Wholesale</a>
-      <a href="#">FAQ</a>
-    </div>
-    <div class="footer-col">
-      <h4>Support</h4>
-      <a href="#">Order Tracking</a>
-      <a href="#">Customer Support</a>
-      <a href="#">Shipping & Returns</a>
-      <a href="#">Payment Authorization</a>
-      <a href="#">Your Privacy Choices</a>
-      <a href="#">Lab Results</a>
-    </div>
-    <div class="footer-col">
-      <h4>Research Catalog</h4>
-      <a href="#">Peptides</a>
-      <a href="#">Blends</a>
-      <a href="#">Solvents</a>
-      <a href="#">Capsules</a>
-      <a href="#">View Full Catalog</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-bottom-row">
-      <div class="footer-info">
-        <p>105 Research Blvd, Suite B — San Diego, CA 92101</p>
-        <p>Support Hours: Monday – Friday, 9AM – 5PM PT</p>
-        <p>+1 (910) 555-1234 | support@akroresearch.com</p>
-        <p style="margin-top:8px;">© 2026 AKRO Research, Inc. — All Rights Reserved.</p>
-      </div>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
       <div>
-        <p class="footer-legal">All products are sold strictly for in-vitro research and laboratory use only. Not intended for human or animal consumption. By purchasing, you agree to our Terms of Service and confirm you are a qualified researcher. Must be 21+ to order.</p>
-        <div class="footer-badges">
-          <span class="footer-badge-item">★ Trustpilot Excellent</span>
-          <span class="footer-badge-item">BBB Accredited</span>
+        <a href="#" class="logo">
+          <span class="logo-name" style="color:white;">AKRO</span>
+          <span class="logo-sub">research</span>
+        </a>
+        <p class="footer-brand-desc">Premium, science-backed dietary supplements formulated for optimal wellness. All
+          products are manufactured in a GMP-certified facility in the United States.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Information</h4>
+        <a href="#">Company Information</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Legal Disclaimer</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Wholesale</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Order Tracking</a>
+        <a href="#">Customer Support</a>
+        <a href="#">Shipping & Returns</a>
+        <a href="#">Payment Authorization</a>
+        <a href="#">Your Privacy Choices</a>
+        <a href="#">Lab Results</a>
+      </div>
+      <div class="footer-col">
+        <h4>Product Catalog</h4>
+        <a href="#">Vitamins & Minerals</a>
+        <a href="#">Collagen</a>
+        <a href="#">Adaptogens</a>
+        <a href="#">Capsules</a>
+        <a href="#">View Full Catalog</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-row">
+        <div class="footer-info">
+          <p>105 Research Blvd, Suite B — San Diego, CA 92101</p>
+          <p>Support Hours: Monday – Friday, 9AM – 5PM PT</p>
+          <p>+1 (910) 555-1234 | support@akroresearch.com</p>
+          <p style="margin-top:8px;">© 2026 AKRO Research, Inc. — All Rights Reserved.</p>
+        </div>
+        <div>
+          <p class="footer-legal">These statements have not been evaluated by the Food and Drug Administration. These
+            products are not intended to diagnose, treat, cure, or prevent any disease. Consult your healthcare provider
+            before use. Must be 18+ to order.</p>
+          <div class="footer-badges">
+            <span class="footer-badge-item">★ Trustpilot Excellent</span>
+            <span class="footer-badge-item">BBB Accredited</span>
+          </div>
         </div>
       </div>
     </div>
+  </footer>
+
+  <!-- DISCLAIMER BANNER -->
+  <div class="disclaimer-banner" id="disclaimer">
+    <strong>★ PREMIUM SUPPLEMENTS</strong> — These statements have not been evaluated by the FDA. Products are not
+    intended to diagnose, treat, cure, or prevent any disease.
+    <button class="dismiss-btn" onclick="document.getElementById('disclaimer').style.display='none'">Dismiss</button>
   </div>
-</footer>
 
-<!-- DISCLAIMER BANNER -->
-<div class="disclaimer-banner" id="disclaimer">
-  <strong>⚠️ FOR RESEARCH USE ONLY</strong> — All products are intended for in-vitro laboratory research only. Not for human consumption.
-  <button class="dismiss-btn" onclick="document.getElementById('disclaimer').style.display='none'">Dismiss</button>
-</div>
+  <script>
+    // === PRODUCT DATA ===
+    const products = [
+      { name: "Collagen Peptides", cat: "collagen", label: "Collagen", desc: "Hydrolyzed Type I & III collagen sourced from grass-fed bovine. Supports skin elasticity, joint comfort, and hair & nail strength.", purity: "99.41%", weight: "500mg", price: 42.99, badge: "popular", stock: "in", stockText: "IN STOCK", liquid: "rgba(26,47,63,0.07)" },
+      { name: "Marine Collagen", cat: "collagen", label: "Collagen", desc: "Wild-caught fish collagen peptides. Highly bioavailable Type I collagen for skin hydration and firmness support.", purity: "99.18%", weight: "500mg", price: 39.99, badge: null, stock: "in", stockText: "IN STOCK", liquid: "rgba(26,47,63,0.06)" },
+      { name: "Magnesium Glycinate", cat: "vitamins", label: "Vitamins & Minerals", desc: "Chelated magnesium bound to glycine for superior absorption. Supports relaxation, sleep quality, and muscle recovery.", purity: "99.53%", weight: "400mg", price: 29.99, badge: "new", stock: "in", stockText: "IN STOCK", liquid: "rgba(90,70,140,0.07)" },
+      { name: "Vitamin D3 + K2", cat: "vitamins", label: "Vitamins & Minerals", desc: "High-potency Vitamin D3 paired with K2 (MK-7) for optimal calcium absorption and bone health support.", purity: "99.37%", weight: "5000 IU", price: 24.99, badge: "new", stock: "low", stockText: "ONLY 4 LEFT", liquid: "rgba(90,70,140,0.06)" },
+      { name: "Ashwagandha KSM-66", cat: "adaptogens", label: "Adaptogens", desc: "Full-spectrum root extract standardized to 5% withanolides. Supports stress resilience, energy, and hormonal balance.", purity: "99.22%", weight: "600mg", price: 34.99, badge: null, stock: "in", stockText: "IN STOCK", liquid: "rgba(90,138,106,0.07)" },
+      { name: "CoQ10 Ubiquinol", cat: "vitamins", label: "Vitamins & Minerals", desc: "Active form of Coenzyme Q10 for superior bioavailability. Supports cellular energy production and heart health.", purity: "99.35%", weight: "200mg", price: 34.99, badge: "popular", stock: "in", stockText: "IN STOCK", liquid: "rgba(90,138,106,0.06)" },
+      { name: "Lion's Mane Extract", cat: "cognitive", label: "Focus & Mood", desc: "Dual-extracted fruiting body mushroom concentrate. Supports cognitive function, memory, and nerve growth factor production.", purity: "99.28%", weight: "500mg", price: 36.99, badge: null, stock: "in", stockText: "IN STOCK", liquid: "rgba(50,80,130,0.07)" },
+      { name: "L-Theanine", cat: "cognitive", label: "Focus & Mood", desc: "Pure amino acid from green tea. Promotes calm focus, relaxation without drowsiness, and supports healthy sleep patterns.", purity: "99.44%", weight: "200mg", price: 22.99, badge: null, stock: "out", stockText: "OUT OF STOCK", liquid: "rgba(50,80,130,0.06)" },
+      { name: "Turmeric+ Bundle", cat: "stacks", label: "Bundle", desc: "Turmeric curcumin 1000mg + BioPerine 10mg for enhanced absorption. Supports joint comfort and healthy inflammation response.", purity: "99.2%+", weight: "1010mg", price: 39.99, origPrice: 49.98, badge: "sale", stock: "in", stockText: "IN STOCK", liquid: "rgba(184,151,90,0.08)" },
+      { name: "Beauty Blend", cat: "stacks", label: "Bundle", desc: "Collagen 500mg, Biotin 5000mcg, Hyaluronic Acid 100mg, Vitamin C 250mg. Complete beauty support formula.", purity: "99.1%+", weight: "850mg", price: 49.99, badge: "exclusive", stock: "in", stockText: "IN STOCK", liquid: "rgba(184,151,90,0.06)" },
+      { name: "Vitality Blend", cat: "stacks", label: "Bundle", desc: "Ashwagandha, Rhodiola, Maca Root, and B-Complex. Multi-adaptogen formula for energy, mood, and daily vitality.", purity: "98.9%+", weight: "900mg", price: 54.99, badge: "exclusive", stock: "low", stockText: "ONLY 2 LEFT", liquid: "rgba(184,151,90,0.1)" },
+      { name: "Zinc Complex", cat: "vitamins", label: "Vitamins & Minerals", desc: "Zinc picolinate with copper for balanced mineral support. Supports immune function, skin health, and metabolism.", purity: "99.31%", weight: "30mg", price: 19.99, badge: null, stock: "in", stockText: "IN STOCK", liquid: "rgba(90,138,106,0.05)" },
+    ];
 
-<script>
-// === PRODUCT DATA ===
-const products = [
-  { name:"BPC-157", cat:"recovery", label:"Recovery", desc:"Pentadecapeptide — 15 amino acids. Widely researched for tissue repair mechanisms in laboratory models.", purity:"99.41%", weight:"5mg", price:42.99, badge:"popular", stock:"in", stockText:"IN STOCK", liquid:"rgba(26,47,63,0.07)" },
-  { name:"TB-500", cat:"recovery", label:"Recovery", desc:"Thymosin Beta-4 fragment. Researched for its role in cell migration and wound repair signaling.", purity:"99.18%", weight:"5mg", price:39.99, badge:null, stock:"in", stockText:"IN STOCK", liquid:"rgba(26,47,63,0.06)" },
-  { name:"Semaglutide", cat:"metabolic", label:"Metabolic", desc:"GLP-1 receptor agonist. Studied extensively for metabolic pathway regulation in vitro.", purity:"99.53%", weight:"3mg", price:89.99, badge:"new", stock:"in", stockText:"IN STOCK", liquid:"rgba(90,70,140,0.07)" },
-  { name:"Tirzepatide", cat:"metabolic", label:"Metabolic", desc:"Dual GIP and GLP-1 receptor agonist. Studied for dual incretin pathway research.", purity:"99.37%", weight:"5mg", price:119.99, badge:"new", stock:"low", stockText:"ONLY 4 LEFT", liquid:"rgba(90,70,140,0.06)" },
-  { name:"CJC-1295 (DAC)", cat:"growth", label:"Growth Hormone", desc:"Modified GRF(1-29) with Drug Affinity Complex. Researched for sustained GH secretagogue activity.", purity:"99.22%", weight:"2mg", price:34.99, badge:null, stock:"in", stockText:"IN STOCK", liquid:"rgba(90,138,106,0.07)" },
-  { name:"Ipamorelin", cat:"growth", label:"Growth Hormone", desc:"Selective GH secretagogue pentapeptide. Studied for targeted growth hormone release mechanisms.", purity:"99.35%", weight:"5mg", price:29.99, badge:"popular", stock:"in", stockText:"IN STOCK", liquid:"rgba(90,138,106,0.06)" },
-  { name:"Selank", cat:"cognitive", label:"Cognitive", desc:"Synthetic analog of tuftsin. Investigated for anxiolytic and nootropic activity in preclinical models.", purity:"99.28%", weight:"5mg", price:36.99, badge:null, stock:"in", stockText:"IN STOCK", liquid:"rgba(50,80,130,0.07)" },
-  { name:"Semax", cat:"cognitive", label:"Cognitive", desc:"ACTH(4-10) analog peptide. Researched for neurotrophin modulation and cognitive pathway signaling.", purity:"99.44%", weight:"5mg", price:38.99, badge:null, stock:"out", stockText:"OUT OF STOCK", liquid:"rgba(50,80,130,0.06)" },
-  { name:"Wolverine Blend", cat:"stacks", label:"Blend", desc:"BPC-157 10mg + TB-500 10mg research blend. Optimized for combined tissue repair studies.", purity:"99.2%+", weight:"20mg", price:69.99, origPrice:82.98, badge:"sale", stock:"in", stockText:"IN STOCK", liquid:"rgba(184,151,90,0.08)" },
-  { name:"GLOW Blend", cat:"stacks", label:"Blend", desc:"GHK-Cu 50mg, BPC-157 10mg, TB-500 10mg. Researched for dermal tissue signaling pathways.", purity:"99.1%+", weight:"70mg", price:129.99, badge:"exclusive", stock:"in", stockText:"IN STOCK", liquid:"rgba(184,151,90,0.06)" },
-  { name:"AURA Blend", cat:"stacks", label:"Blend", desc:"GHK-Cu, Epithalon, Snap-8, KPV blend. Multi-pathway research compound for advanced studies.", purity:"98.9%+", weight:"80mg", price:149.99, badge:"exclusive", stock:"low", stockText:"ONLY 2 LEFT", liquid:"rgba(184,151,90,0.1)" },
-  { name:"MK-677 (Ibutamoren)", cat:"growth", label:"Growth Hormone", desc:"Non-peptide GH secretagogue. Studied for oral bioavailability and sustained IGF-1 signaling research.", purity:"99.31%", weight:"25mg/cap", price:54.99, badge:null, stock:"in", stockText:"IN STOCK", liquid:"rgba(90,138,106,0.05)" },
-];
-
-// === RENDER PRODUCTS ===
-function renderProducts(filter='all') {
-  const grid = document.getElementById('productsGrid');
-  const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
-  grid.innerHTML = filtered.map(p => `
+    // === RENDER PRODUCTS ===
+    function renderProducts(filter = 'all') {
+      const grid = document.getElementById('productsGrid');
+      const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+      grid.innerHTML = filtered.map(p => `
     <div class="product-card">
       <div class="product-img">
         <div class="card-vial">
@@ -1538,7 +1947,7 @@ function renderProducts(filter='all') {
             <div class="cv-shine"></div>
           </div>
         </div>
-        ${p.badge ? `<span class="product-badge badge-${p.badge}">${{new:'✦ NEW',popular:'★ BEST SELLER',exclusive:'◆ EXCLUSIVE',sale:'↓ SALE'}[p.badge]}</span>` : ''}
+        ${p.badge ? `<span class="product-badge badge-${p.badge}">${{ new: '✦ NEW', popular: '★ BEST SELLER', exclusive: '◆ EXCLUSIVE', sale: '↓ SALE' }[p.badge]}</span>` : ''}
       </div>
       <div class="product-details">
         <div class="product-brand">AKRO Research</div>
@@ -1550,53 +1959,54 @@ function renderProducts(filter='all') {
             <span class="currency">$</span>${p.price.toFixed(2)}<span class="usd">USD</span>
             ${p.origPrice ? `<span class="original-price">$${p.origPrice.toFixed(2)}</span>` : ''}
           </div>
-          <button class="btn-add-cart ${p.stock==='out'?'out-of-stock':''}" ${p.stock==='out'?'disabled':''} onclick="${p.stock!=='out'?'addToCart(this)':''}">
-            ${p.stock==='out' ? 'Out of stock' : 'Add to cart'}
+          <button class="btn-add-cart ${p.stock === 'out' ? 'out-of-stock' : ''}" ${p.stock === 'out' ? 'disabled' : ''} onclick="${p.stock !== 'out' ? 'addToCart(this)' : ''}">
+            ${p.stock === 'out' ? 'Out of stock' : 'Add to cart'}
           </button>
         </div>
       </div>
     </div>
   `).join('');
-}
+    }
 
-function filterProducts(cat, el) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  renderProducts(cat);
-}
-function setFilter(cat) { filterProducts(cat, document.querySelector(`.filter-btn[data-cat="${cat}"]`)); }
+    function filterProducts(cat, el) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      renderProducts(cat);
+    }
+    function setFilter(cat) { filterProducts(cat, document.querySelector(`.filter-btn[data-cat="${cat}"]`)); }
 
-let cartCount = 0;
-function addToCart(btn) {
-  cartCount++;
-  document.getElementById('cartBadge').textContent = cartCount;
-  btn.textContent = '✓ Added';
-  btn.style.background = '#5A8A6A';
-  setTimeout(() => { btn.textContent = 'Add to cart'; btn.style.background = ''; }, 1400);
-}
+    let cartCount = 0;
+    function addToCart(btn) {
+      cartCount++;
+      document.getElementById('cartBadge').textContent = cartCount;
+      btn.textContent = '✓ Added';
+      btn.style.background = '#5A8A6A';
+      setTimeout(() => { btn.textContent = 'Add to cart'; btn.style.background = ''; }, 1400);
+    }
 
-// === AGE GATE ===
-function closeAgeGate() {
-  document.getElementById('ageGate').classList.add('hidden');
-}
-document.body.style.overflow = 'hidden';
-document.getElementById('ageGate').addEventListener('transitionend', function() {
-  if(this.classList.contains('hidden')) { this.style.display='none'; document.body.style.overflow=''; }
-});
+    // === AGE GATE ===
+    function closeAgeGate() {
+      document.getElementById('ageGate').classList.add('hidden');
+    }
+    document.body.style.overflow = 'hidden';
+    document.getElementById('ageGate').addEventListener('transitionend', function () {
+      if (this.classList.contains('hidden')) { this.style.display = 'none'; document.body.style.overflow = ''; }
+    });
 
-// === NAV SCROLL ===
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
-});
+    // === NAV SCROLL ===
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
 
-// === SCROLL REVEAL ===
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // === SCROLL REVEAL ===
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// === INIT ===
-renderProducts();
-</script>
+    // === INIT ===
+    renderProducts();
+  </script>
 </body>
+
 </html>
