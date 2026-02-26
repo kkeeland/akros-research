@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: medusa
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: akro_medusa
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medusa -d akro_medusa"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  medusa:
+    build:
+      context: ./backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://medusa:${DB_PASSWORD}@postgres:5432/akro_medusa
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: production
+      STORE_CORS: https://akroresearch.com
+      ADMIN_CORS: https://admin.akroresearch.com,https://akroresearch.com
+      AUTH_CORS: https://akroresearch.com,https://admin.akroresearch.com
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      MEDUSA_BACKEND_URL: https://api.akroresearch.com
+    ports:
+      - "127.0.0.1:9000:9000"
+
+  storefront:
+    build:
+      context: ./storefront
+    restart: always
+    depends_on:
+      - medusa
+    environment:
+      NEXT_PUBLIC_MEDUSA_BACKEND_URL: https://api.akroresearch.com
+      NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${MEDUSA_PUBLISHABLE_KEY}
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+      NEXT_PUBLIC_SITE_URL: https://akroresearch.com
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    depends_on:
+      - medusa
+      - storefront
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - "80:80"
+      - "443:443"
+
+volumes:
+  pg_data:
